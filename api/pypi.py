@@ -12,15 +12,15 @@ def version_exists(package_name, version):
     # TODO
     # Fazer requisição na API do PyPI para checar se a versão existe
     
-    package_name = package["name"]
-    version = package["version"]
+    #package_name = package["name"]
+    #version = package["version"]
     
     response = requests.get(f"https://pypi.python.org/pypi/{package_name}/{version}/json")
         
     if response.status_code == 400: 
         False
-        
-    return True
+    else: 
+        return True
 
 
 def latest_version(package_name):
@@ -37,5 +37,5 @@ def latest_version(package_name):
         
     else: 
         response = response.json()
-        version = response["info"]["version"]
+        version = response['info']['version']
         return version

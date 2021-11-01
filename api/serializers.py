@@ -33,9 +33,7 @@ class PackageSerializer(serializers.ModelSerializer):
             if l_version: 
                 data['version'] = l_version
                 return data
-            else:
-                raise serializers.ValidationError()
-
+        
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,16 +49,16 @@ class ProjectSerializer(serializers.ModelSerializer):
         # Algumas referência para uso de models do Django:
         # - https://docs.djangoproject.com/en/3.2/topics/db/models/
         # - https://www.django-rest-framework.org/api-guide/serializers/#saving-instances
-        name = package["name"]
-        version = package["version"]
+        #name = package["name"]
+        #version = package["version"]
         packages = validated_data["packages"]
 
-        project = Project.objects.create(name=validated_data["name"])
+        proj = Project.objects.create(name=validated_data["name"])
         
         for package in packages:
-            PackageRelease.objects.create(project=project, **packages)
+            PackageRelease.objects.create(project=proj, name=package["name"], version=package["version"])
         
-        project.save()
+        proj.save()
               
         #return Project(name=validated_data["name"])
-        return project
+        return proj
