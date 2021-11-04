@@ -17,7 +17,7 @@ def version_exists(package_name, version):
     
     response = requests.get(f"https://pypi.python.org/pypi/{package_name}/{version}/json")
         
-    if response.status_code == 400: 
+    if response.status_code == 404: 
         False
     else: 
         return True
@@ -32,7 +32,7 @@ def latest_version(package_name):
     
     response = requests.get(f"https://pypi.org/pypi/{package_name}/json")
         
-    if response.status_code == 400:
+    if response.status_code == 404:
         return None
         
     else: 

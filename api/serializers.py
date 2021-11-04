@@ -24,15 +24,17 @@ class PackageSerializer(serializers.ModelSerializer):
         if version:
             v_exists = version_exists(name, version)
 
-            if v_exists:
+            if v_exists == True:
                 return data
             else: 
-                raise serializers.ValidationError({"error":"One or more packages doesn't exist"})
+                raise serializers.ValidationError({"error":"One or more packages doesn't exist d"})
         else:        
             l_version = latest_version(name)
             if l_version: 
                 data['version'] = l_version
                 return data
+            else: 
+                raise serializers.ValidationError({"error":"One or more packages doesn't exist d"})
         
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -56,9 +58,13 @@ class ProjectSerializer(serializers.ModelSerializer):
         proj = Project.objects.create(name=validated_data["name"])
         
         for package in packages:
-            PackageRelease.objects.create(project=proj, name=package["name"], version=package["version"])
+            PackageRelease.objects.create(project=proj, **package)
         
-        proj.save()
+        #proj.save()
+        proj: {
+            "name": Project(name=validated_data["name"]),
+            "packages": [*package],
+        }
               
         #return Project(name=validated_data["name"])
         return proj
